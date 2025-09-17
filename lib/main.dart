@@ -14,6 +14,11 @@ class KrishiSaathiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Krishi Saathi",
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        scaffoldBackgroundColor: Colors.white,
+      ),
       debugShowCheckedModeBanner: false,
       home: const MainPage(),
     );
@@ -30,11 +35,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const CropsScreen(),
-    const WeatherScreen(),
-    const SettingsScreen(),
+  final List<Widget> _screens = const [
+    HomeScreen(),
+    CropsScreen(),
+    WeatherScreen(),  // Weather logic is in weather_screen.dart
+    SettingsScreen(),
   ];
 
   @override

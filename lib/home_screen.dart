@@ -6,22 +6,45 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Krishi Saathi - Home")),
+      appBar: AppBar(
+        title: const Text("Krishi Saathi"),
+        backgroundColor: Colors.green,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/crops'),
-              child: const Text("View Crops"),
+            const Text(
+              "🌱 Welcome to Krishi Saathi!",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/weather'),
-              child: const Text("Check Weather"),
+            const SizedBox(height: 20),
+            const Text(
+              "Your smart farming companion.\n"
+              "Use this app to check crop info,\n"
+              "weather updates, and manage settings.",
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/settings'),
-              child: const Text("Settings"),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Feature coming soon! 🚜"),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.agriculture),
+              label: const Text("Explore Crops"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
