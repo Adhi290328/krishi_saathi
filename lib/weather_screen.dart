@@ -14,8 +14,17 @@ class EnhancedWeatherScreen extends StatefulWidget {
 class _EnhancedWeatherScreenState extends State<EnhancedWeatherScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   
-  // Get API key from environment variables with fallback
-  String get apiKey => dotenv.env['OPENWEATHER_API_KEY'] ?? 'your-fallback-api-key';
+  // Safe API key access with proper error handling
+  String get apiKey {
+    try {
+      if (dotenv.isInitialized) {
+        return dotenv.env['OPENWEATHER_API_KEY'] ?? '';
+      }
+    } catch (e) {
+      debugPrint('Error accessing OpenWeather API key: $e');
+    }
+    return '';
+  }
   
   final TextEditingController _cityController = TextEditingController();
 
@@ -43,9 +52,9 @@ class _EnhancedWeatherScreenState extends State<EnhancedWeatherScreen> with Tick
     _tabController = TabController(length: 3, vsync: this);
     
     // Check if API key is available
-    if (apiKey == 'your-fallback-api-key' || apiKey.isEmpty) {
+    if (apiKey.isEmpty) {
       setState(() {
-        message = "API key not configured. Please check your .env file.";
+        message = "OpenWeather API key not found. Please check your .env file and ensure OPENWEATHER_API_KEY is set.";
         _isLoading = false;
       });
     } else {
@@ -276,14 +285,14 @@ class _EnhancedWeatherScreenState extends State<EnhancedWeatherScreen> with Tick
             }
           } catch (e) {
             // Skip invalid forecast data
-            print('Error parsing forecast item: $e');
+            debugPrint('Error parsing forecast item: $e');
           }
         }
       });
       
     } catch (e) {
       // Handle parsing errors gracefully
-      print('Error parsing weather data: $e');
+      debugPrint('Error parsing weather data: $e');
     }
   }
 

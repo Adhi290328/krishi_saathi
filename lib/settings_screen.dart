@@ -576,7 +576,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _pickReminderTime() async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: 8, minute: 0),
+      initialTime: const TimeOfDay(hour: 8, minute: 0),
     );
     if (picked != null) {
       setState(() {

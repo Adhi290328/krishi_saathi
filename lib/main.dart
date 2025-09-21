@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,6 +12,14 @@ import 'weather_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase with error handling
+  try {
+    await Firebase.initializeApp();
+    debugPrint('Firebase initialized successfully');
+  } catch (e) {
+    debugPrint('Firebase initialization error: $e');
+  }
   
   // Enhanced system UI configuration
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -31,6 +40,7 @@ Future<void> main() async {
     debugPrint('Environment file loaded successfully');
   } catch (e) {
     debugPrint('Warning: Could not load .env file: $e');
+    // Continue without .env file - app should still work
   }
   
   runApp(const KrishiSaathiApp());
@@ -182,11 +192,11 @@ class _KrishiSaathiAppState extends State<KrishiSaathiApp> {
       // Animations
       pageTransitionsTheme: PageTransitionsTheme(
         builders: _enableAnimations ? {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.android: const CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
         } : {
-          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.android: const FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: const FadeUpwardsPageTransitionsBuilder(),
         },
       ),
     );
@@ -260,11 +270,11 @@ class _KrishiSaathiAppState extends State<KrishiSaathiApp> {
       
       pageTransitionsTheme: PageTransitionsTheme(
         builders: _enableAnimations ? {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.android: const CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
         } : {
-          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-          TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.android: const FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: const FadeUpwardsPageTransitionsBuilder(),
         },
       ),
     );
@@ -272,8 +282,18 @@ class _KrishiSaathiAppState extends State<KrishiSaathiApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Safe access to environment variables
+    String appName = "Krishi Saathi";
+    try {
+      if (dotenv.isInitialized) {
+        appName = dotenv.env['APP_NAME'] ?? "Krishi Saathi";
+      }
+    } catch (e) {
+      debugPrint('Error accessing APP_NAME from environment: $e');
+    }
+    
     return MaterialApp(
-      title: dotenv.env['APP_NAME'] ?? "Krishi Saathi",
+      title: appName,
       theme: _buildLightTheme(),
       darkTheme: _buildDarkTheme(),
       themeMode: _themeMode,
